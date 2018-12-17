@@ -1,0 +1,73 @@
+﻿@model Contacts.Web.Models.ContactsListViewModel
+@using PagedList.Mvc
+
+<table id="contactsGrid" class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">
+                @Ajax.ActionLink("Фамилия", "GetContacts",
+                    new { sortOrder = ViewBag.LastNameSortParm },
+                    new AjaxOptions {UpdateTargetId= "contactsGrid", InsertionMode = InsertionMode.Replace })
+
+            </th>
+            <th scope="col">
+                @Ajax.ActionLink("Имя", "GetContacts",
+                    new { sortOrder = ViewBag.FirstNameSortParm },
+                    new AjaxOptions {UpdateTargetId= "contactsGrid", InsertionMode = InsertionMode.Replace })
+            </th>
+            <th scope="col">
+                @Ajax.ActionLink("E-Mail", "GetContacts",
+                    new { sortOrder = ViewBag.EmailSortParm },
+                    new AjaxOptions {UpdateTargetId= "contactsGrid", InsertionMode = InsertionMode.Replace })
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var person in Model.Persons)
+        {
+            <tr id="@person.Id" >
+                <td scope="row">
+                    @person.LastName
+                </td>
+                <td>
+                    @person.FirstName
+                </td>
+                <td>
+                    @person.Email
+                </td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td>
+                @Html.PagedListPager(
+                    Model.Persons,
+                    page => Url.Action("GetContacts", new { sortOrder = Model.SortingOrder, page = page}),
+                    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions(){ HttpMethod = "GET", UpdateTargetId = "contactsGrid"})
+                )
+            </td>
+            <td></td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>
+                @Ajax.ActionLink("Добавить",
+                    "AddContact",
+                    null,
+                    new AjaxOptions {
+                        HttpMethod = "GET",
+                        UpdateTargetId = "result",
+                        InsertionMode = InsertionMode.Replace,
+                        OnSuccess = "$('#details').modal('show');",
+                    },
+                    new { @class = "btn btn-default"})
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<script>
+    var editContact = function () {
+
+    }
+</script>

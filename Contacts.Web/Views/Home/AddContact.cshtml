@@ -1,0 +1,83 @@
+﻿@model Contacts.Web.Models.FullPersonInfoModel
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Добавить пользователя</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    @using (Ajax.BeginForm("AddContact", "Home",
+        new AjaxOptions { OnSuccess = "onSuccess",UpdateTargetId = "result", HttpMethod = "POST" },
+        new { @id = "contactForm", @class = "form-group" }))
+    {
+
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+
+        <br />
+        <br />
+        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+
+        <br />
+        <br />
+        @Html.LabelFor(m => m.MiddleName, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MiddleName, "", new { @class = "text-danger" })
+
+        <br />
+        <br />
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+        <br />
+        <br />
+        @Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
+        @Html.EnumDropDownListFor(m => m.Gender, new { @class = "form-control" })
+
+        <br />
+        <br />
+        @Html.LabelFor(m => m.Inn, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.Inn, new { @class = "form-control " })
+        @Html.ValidationMessageFor(m => m.Inn, "", new { @class = "text-danger" })
+
+        <br />
+        <br />
+        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", id = "phone" })
+        @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+
+        <br />
+        <br />
+        @Html.LabelFor(m => m.BirthDate, new { @class = "mol-md-2 control-label" })
+        @Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control date-field", @type = "date",
+            @min ="1900-01-01", @max= DateTime.Now.Year.ToString()+"-"+DateTime.Now.Month.ToString()+"-"+DateTime.Now.Day.ToString()})
+        @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger" })
+    }
+
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+    <button type="button" class="btn btn-primary" onclick="$('#contactForm').submit();">Добавить</button>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#phone").inputmask("+7 (999) 999-9999");
+    });
+    </script >
+        <script type="text/javascript">
+            var onSuccess = function (result) {
+        if (result.success) {
+            // if the server returned a JSON object containing an url 
+            // property we redirect the browser to that url
+            console.log("onSuccess worked")
+            $('#details').modal('hide');
+            updateGrid();
+        }
+    }
+</script>
